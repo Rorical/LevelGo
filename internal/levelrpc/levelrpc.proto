@@ -1,0 +1,33 @@
+syntax = "proto3";
+option go_package = ".;levelrpc";
+package levelrpc;
+
+service LevelRpcService {
+  rpc Get (GetRequest) returns (GetReply) {}
+  rpc Set (SetRequest) returns (ErrorReply) {}
+  rpc Has (GetRequest) returns (HasReply) {}
+  rpc Del (GetRequest) returns (ErrorReply) {}
+}
+
+message GetRequest {
+  bytes key = 1;
+}
+
+message GetReply {
+  bytes value = 2;
+  int32 error = 3;
+}
+
+message SetRequest {
+  bytes key = 4;
+  bytes value = 5;
+}
+
+message ErrorReply {
+  int32 error = 6;
+}
+
+message HasReply {
+  bool value = 7;
+  int32 error = 8;
+}
