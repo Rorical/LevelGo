@@ -13,15 +13,15 @@ go build
 ```
 即可开启Leveldb rpc
 
-![截图](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20201231214623105.png)
+![截图](https://doc.kmf.com/ke-feedback/2020/12/31/21/46/18/20201231214617.png)
 
 读性能
 
-![读性能](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20201231214714901.png)
+![读性能](https://doc.kmf.com/ke-feedback/2020/12/31/21/47/11/20201231214711.png)
 
 写性能
 
-![写性能](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20201231214750151.png)
+![写性能](https://doc.kmf.com/ke-feedback/2020/12/31/21/47/45/M59]S5{G6~BVSS2NPV{Z]YI.png)
 
 客户端库在external\client,有Get,Set,Has,Del,请参见对应的test
 
