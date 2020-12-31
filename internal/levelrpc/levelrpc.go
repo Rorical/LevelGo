@@ -19,25 +19,21 @@ type LevelServer struct {
 }
 
 func (s *LevelServer) Get(ctx context.Context, in *GetRequest) (*GetReply, error) {
-	log.Printf("Get %s", in.Key)
 	value, err := s.DB.Get(in.Key)
 	return &GetReply{Value: value, Error: utils.ErrorToErrCode(err)}, nil
 }
 
 func (s *LevelServer) Set(ctx context.Context, in *SetRequest) (*ErrorReply, error) {
-	log.Printf("Set %s", in.Key)
 	err := s.DB.Set(in.Key, in.Value)
 	return &ErrorReply{Error: utils.ErrorToErrCode(err)}, nil
 }
 
 func (s *LevelServer) Has(ctx context.Context, in *GetRequest) (*HasReply, error) {
-	log.Printf("Has %s", in.Key)
 	value, err := s.DB.Has(in.Key)
 	return &HasReply{Value: value, Error: utils.ErrorToErrCode(err)}, nil
 }
 
 func (s *LevelServer) Del(ctx context.Context, in *GetRequest) (*ErrorReply, error) {
-	log.Printf("Del %s", in.Key)
 	err := s.DB.Del(in.Key)
 	return &ErrorReply{Error: utils.ErrorToErrCode(err)}, nil
 }
@@ -69,5 +65,5 @@ func (self *LevelRpcServer) Listen() {
 	if err != nil {
 		panic(err)
 	}
-
+	defer self.DB.Close()
 }

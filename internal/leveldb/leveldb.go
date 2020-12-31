@@ -75,6 +75,6 @@ func (self *LevelDB) RunBatch(batch *LevelDBBatchOperations) error {
 	return err
 }
 
-func (self *LevelDB) CloseLevelDB() {
+func (self *LevelDB) Close() {
 	self.db.Close()
 }
