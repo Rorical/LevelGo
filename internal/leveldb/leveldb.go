@@ -8,7 +8,7 @@ import (
 )
 
 type LevelDB struct {
-	db       *leveldb.DB
+	DB       *leveldb.DB
 	NotFound error
 }
 
@@ -24,13 +24,13 @@ func GetLevelDB(leveldbConf *config.LevelDBSetting) *LevelDB {
 	}
 	log.Print("LevelDB Init")
 	return &LevelDB{
-		db:       db,
+		DB:       db,
 		NotFound: leveldb.ErrNotFound,
 	}
 }
 
 func (self *LevelDB) Get(key []byte) ([]byte, error) {
-	data, err := self.db.Get(key, nil)
+	data, err := self.DB.Get(key, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -38,12 +38,12 @@ func (self *LevelDB) Get(key []byte) ([]byte, error) {
 }
 
 func (self *LevelDB) Set(key []byte, value []byte) error {
-	err := self.db.Put(key, value, nil)
+	err := self.DB.Put(key, value, nil)
 	return err
 }
 
 func (self *LevelDB) Has(key []byte) (bool, error) {
-	has, err := self.db.Has(key, nil)
+	has, err := self.DB.Has(key, nil)
 	if err != nil {
 		return false, err
 	}
@@ -51,7 +51,7 @@ func (self *LevelDB) Has(key []byte) (bool, error) {
 }
 
 func (self *LevelDB) Del(key []byte) error {
-	err := self.db.Delete(key, nil)
+	err := self.DB.Delete(key, nil)
 	return err
 }
 
@@ -71,10 +71,10 @@ func (self *LevelDBBatchOperations) Del(key []byte) {
 }
 
 func (self *LevelDB) RunBatch(batch *LevelDBBatchOperations) error {
-	err := self.db.Write(batch.batch, nil)
+	err := self.DB.Write(batch.batch, nil)
 	return err
 }
 
 func (self *LevelDB) Close() {
-	self.db.Close()
+	self.DB.Close()
 }
