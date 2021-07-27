@@ -3,12 +3,15 @@ package leveldb
 import (
 	"LevelGo/internal/config"
 	"log"
+	"sync"
 
 	"github.com/syndtr/goleveldb/leveldb"
+	"github.com/syndtr/goleveldb/leveldb/opt"
 )
 
 type LevelDB struct {
 	DB       *leveldb.DB
+	lock     *sync.RWMutex
 	NotFound error
 }
 
@@ -25,11 +28,14 @@ func GetLevelDB(leveldbConf *config.LevelDBSetting) *LevelDB {
 	log.Print("LevelDB Init")
 	return &LevelDB{
 		DB:       db,
+		lock:     new(sync.RWMutex),
 		NotFound: leveldb.ErrNotFound,
 	}
 }
 
 func (self *LevelDB) Get(key []byte) ([]byte, error) {
+	self.lock.RLock()
+	defer self.lock.RUnlock()
 	data, err := self.DB.Get(key, nil)
 	if err != nil {
 		return nil, err
@@ -38,11 +44,15 @@ func (self *LevelDB) Get(key []byte) ([]byte, error) {
 }
 
 func (self *LevelDB) Set(key []byte, value []byte) error {
-	err := self.DB.Put(key, value, nil)
+	self.lock.Lock()
+	defer self.lock.Unlock()
+	err := self.DB.Put(key, value, &opt.WriteOptions{Sync: true})
 	return err
 }
 
 func (self *LevelDB) Has(key []byte) (bool, error) {
+	self.lock.RLock()
+	defer self.lock.RUnlock()
 	has, err := self.DB.Has(key, nil)
 	if err != nil {
 		return false, err
@@ -51,7 +61,9 @@ func (self *LevelDB) Has(key []byte) (bool, error) {
 }
 
 func (self *LevelDB) Del(key []byte) error {
-	err := self.DB.Delete(key, nil)
+	self.lock.Lock()
+	defer self.lock.Unlock()
+	err := self.DB.Delete(key, &opt.WriteOptions{Sync: true})
 	return err
 }
 
